@@ -239,6 +239,29 @@ class BeberleiMetricsExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedTags, $this->getProperty($collector, 'tags'));
     }
 
+    public function testWithPrometheus()
+    {
+        $promPushClientMock = $this->getMockBuilder('PromPush\Client')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
+        $container = $this->createContainer(array(
+            'collectors' => array(
+                'prometheus' => array(
+                    'type' => 'influxdb',
+                    'prompush_client' => 'prompush_client_mock',
+                ),
+            ),
+        ), array(
+            'prompush_client_mock' => $promPushClientMock,
+        ));
+
+        $collector = $container->get('beberlei_metrics.collector.prometheus');
+        $this->assertInstanceOf('Beberlei\Metrics\Collector\Prometheus', $collector);
+        $this->assertSame($promPushClientMock, $this->getProperty($collector, 'client'));
+    }
+
     private function createContainer($configs, $additionalServices = array())
     {
         $container = new ContainerBuilder();

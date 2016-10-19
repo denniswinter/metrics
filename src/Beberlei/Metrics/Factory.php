@@ -17,6 +17,7 @@ use Net\Zabbix\Sender;
 use Net\Zabbix\Agent\Config;
 use Buzz\Browser;
 use Buzz\Client\Curl;
+use PromPush\Client;
 
 /**
  * Static factory for Metrics Collectors.
@@ -137,6 +138,17 @@ abstract class Factory
 
             case 'null':
                 return new Collector\NullCollector();
+
+            case 'prometheus':
+                if (!isset($options['client'])) {
+                    throw new MetricsException('Missing \'client\' key for Prometheus collector');
+                }
+
+                if (!($options['client'] instanceof Client)) {
+                    throw new MetricsException('Client needs to be instance of \'PromPush\Client\'');
+                }
+
+                return new Collector\Prometheus($options['client']);
 
             default:
                 throw new MetricsException(sprintf('Unknown metrics collector given (%s).', $type));

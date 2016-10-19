@@ -99,6 +99,18 @@ class BeberleiMetricsExtension extends Extension
                 $definition->replaceArgument(1, $config['prefix']);
 
                 return $definition;
+            case 'prometheus':
+                $definition = new Definition('PromPush\Client');
+
+
+                $definition->replaceArgument(0, new Reference($config['prompush_client']));
+
+
+                $definition->replaceArgument(1, $config['job'] ?: null);
+                $definition->replaceArgument(2, $config['groups'] ?: null);
+
+
+                return $definition;
             default:
                 throw new \InvalidArgumentException(sprintf('The type "%s" is not supported', $type));
         }

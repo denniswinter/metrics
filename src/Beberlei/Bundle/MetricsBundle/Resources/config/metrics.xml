@@ -46,6 +46,11 @@
             <argument /> <!-- sender, set by the extension -->
             <argument /> <!-- host, set by the extension -->
         </service>
+        <service id="beberlei_metrics.collector_proto.prometheus" class="Beberlei\Metrics\Collector\Prometheus" abstract="true">
+            <argument /> <!-- PromPush client, set by the extension -->
+            <argument /> <!-- job, set by the extension -->
+            <argument /> <!-- groups, set by the extension -->
+        </service>
     </services>
 
 </container>

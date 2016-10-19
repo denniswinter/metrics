@@ -18,6 +18,7 @@ Currently supported backends:
 * Null (Dummy that does nothing)
 * StatsD
 * Zabbix
+* Prometheus Push Gateway
 
 ## Installation
 
@@ -86,6 +87,12 @@ $librato = \Beberlei\Metrics\Factory::create('librato', array(
 ));
 
 $null = \Beberlei\Metrics\Factory::create('null');
+
+$prometheus = \Beberlei\Metrics\Factory::create('prometheus', array(
+    'client' => new PromPush\Client(new \GuzzleHttp\Client(array(
+        'base_url' => 'http://beberlei.example,com:9091'
+    )))
+));
 ```
 
 ## Symfony Bundle Integration
@@ -138,6 +145,9 @@ Do Configuration:
                 tags:
                     dc: "west"
                     node_instance: "hermes10"
+            prometheus:
+                type: prometheus
+                prometheus_client: prometheus_client_service # usind the Prometheus PushGateway client service named "prometheus_client_service"
 
 This adds collectors to the Metrics registry. The functions are automatically
 included in the Bundle class so that in your code you can just start using the

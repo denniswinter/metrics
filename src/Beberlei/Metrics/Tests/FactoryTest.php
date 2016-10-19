@@ -3,6 +3,7 @@
 namespace Beberlei\Metrics\Tests;
 
 use Beberlei\Metrics\Factory;
+use InfluxDB\Client;
 use Psr\Log\NullLogger;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
@@ -24,6 +25,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             array('Beberlei\Metrics\Collector\Logger', 'logger', array('logger' => new NullLogger())),
             array('Beberlei\Metrics\Collector\NullCollector', 'null'),
             array('Beberlei\Metrics\Collector\InfluxDB', 'influxdb', array('client' => $this->getMockBuilder('\\InfluxDB\\Client')->disableOriginalConstructor()->getMock())),
+            array('Beberlei\Metrics\Collector\Prometheus', 'prometheus', array('client' => $this->getMockBuilder('PromPush\Client')->disableOriginalConstructor()->getMock())),
         );
     }
 
@@ -53,6 +55,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             array('connection is required for Doctrine DBAL collector.', 'doctrine_dbal'),
             array('Missing \'logger\' key with logger service.', 'logger'),
             array('Missing \'client\' key for InfluxDB collector.', 'influxdb'),
+            array('Missing \'client\' key for Prometheus collector', 'prometheus', array('port' => '1234')),
+            array('', 'prometheus', array('client' => $this->getMockBuilder('\\InfluxDB\\Client')->disableOriginalConstructor()->getMock()))
         );
     }
 
