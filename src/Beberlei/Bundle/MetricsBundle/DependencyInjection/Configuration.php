@@ -42,6 +42,7 @@ class Configuration implements ConfigurationInterface
                             ->arrayNode('prompush_groups')
                                 ->defaultValue(null)
                                 ->prototype('scalar')->end()
+                            ->end()
                             ->arrayNode('tags')
                                 ->defaultValue(array())
                                 ->prototype('scalar')->end()
